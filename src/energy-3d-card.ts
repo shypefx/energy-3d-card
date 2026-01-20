@@ -313,83 +313,92 @@ export class Energy3dCard extends LitElement {
     if (!this.hass || !this.config) {
       return html`<div class="loading">Loading...</div>`;
     }
-
+  
     const baseImage = this.config.image || '/local/energy-3d-card/house.webp';
     const showDetails = this.config.show_details ?? true;
-
+  
     return html`
       <ha-card .header=${this.config.title || ''}>
-        <div class="layers-container">
-          <img 
-            src="${baseImage}" 
-            class="layer-img" 
-            alt="House" 
-            @load=${this.handleImageLoad}
-          />
-          <canvas class="layer-canvas"></canvas>
-
-          ${this.energyFlows.map(flow => {
-            const totalPower = this.getPowerForFlow(flow);
-            const entityPowers = this.getEntityPowers(flow);
-            const textColor = this.getTextColorForPower(totalPower);
-            const isActive = Math.abs(totalPower) > 10;
-
-            return isActive ? html`
-              <div 
-                class="power-value" 
-                style="
-                  left: ${flow.valuePosition.x}%;
-                  top: ${flow.valuePosition.y}%;
-                  color: ${textColor};
-                  text-shadow: 0 0 10px ${textColor}66;
-                "
-              >
-                <div class="total-power">
-                  ${flow.name}: ${Math.abs(Math.round(totalPower))} W
-                </div>
-                ${showDetails && entityPowers.length > 1 ? html`
-                  <div class="power-details">
-                    ${entityPowers.map(ep => html`
-                      <div class="power-detail-item">
-                        ${ep.name}: ${Math.abs(Math.round(ep.power))} W
-                      </div>
-                    `)}
+        <div class="card-content">
+          <div class="layers-container">
+            <img 
+              src="${baseImage}" 
+              class="layer-img" 
+              alt="House" 
+              @load=${this.handleImageLoad}
+            />
+            <canvas class="layer-canvas"></canvas>
+  
+            ${this.energyFlows.map(flow => {
+              const totalPower = this.getPowerForFlow(flow);
+              const entityPowers = this.getEntityPowers(flow);
+              const textColor = this.getTextColorForPower(totalPower);
+              const isActive = Math.abs(totalPower) > 10;
+  
+              return isActive ? html`
+                <div 
+                  class="power-value" 
+                  style="
+                    left: ${flow.valuePosition.x}%;
+                    top: ${flow.valuePosition.y}%;
+                    color: ${textColor};
+                    text-shadow: 0 0 10px ${textColor}66;
+                  "
+                >
+                  <div class="total-power">
+                    ${flow.name}: ${Math.abs(Math.round(totalPower))} W
                   </div>
-                ` : ''}
-              </div>
-            ` : '';
-          })}
+                  ${showDetails && entityPowers.length > 1 ? html`
+                    <div class="power-details">
+                      ${entityPowers.map(ep => html`
+                        <div class="power-detail-item">
+                          ${ep.name}: ${Math.abs(Math.round(ep.power))} W
+                        </div>
+                      `)}
+                    </div>
+                  ` : ''}
+                </div>
+              ` : '';
+            })}
+          </div>
         </div>
       </ha-card>
     `;
   }
-
+  
   static get styles(): CSSResultGroup {
     return css`
       :host {
         display: block;
+        width: 100%;
       }
-
+  
       ha-card {
-        background: transparent;
-        border: none;
-        box-shadow: none;
+        background: var(--ha-card-background, var(--card-background-color, white));
+        border-radius: var(--ha-card-border-radius, 12px);
         overflow: hidden;
       }
-
+  
+      .card-content {
+        padding: 16px;
+      }
+  
       .layers-container {
         position: relative;
         width: 100%;
-        border-radius: 12px;
-        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-
+  
       .layer-img {
-        width: 80%;
+        width: 90%;
+        max-width: 100%;
         height: auto;
         display: block;
+        margin: 0 auto;
       }
-
+  
       .layer-canvas {
         position: absolute;
         top: 0;
@@ -398,7 +407,7 @@ export class Energy3dCard extends LitElement {
         height: 100%;
         pointer-events: none;
       }
-
+  
       .power-value {
         position: absolute;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -406,31 +415,41 @@ export class Energy3dCard extends LitElement {
         white-space: nowrap;
         pointer-events: none;
         z-index: 10;
+        transform: translate(-50%, -50%);
       }
-
+  
       .total-power {
-        font-size: clamp(14px, 3.5vw, 24px);
+        font-size: clamp(12px, 2.5vw, 20px);
         font-weight: 700;
         letter-spacing: 0.5px;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 4px 8px;
+        border-radius: 4px;
       }
-
+  
       .power-details {
         margin-top: 4px;
-        padding-top: 4px;
-        border-top: 1px solid currentColor;
-        opacity: 0.85;
+        padding: 4px 8px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 4px;
+        opacity: 0.9;
       }
-
+  
       .power-detail-item {
-        font-size: clamp(10px, 2vw, 14px);
+        font-size: clamp(9px, 1.8vw, 12px);
         font-weight: 500;
       }
-
+  
       .loading {
-        padding: 20px;
+        padding: 40px;
         text-align: center;
         color: var(--secondary-text-color);
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     `;
   }
+  
 }

@@ -4,6 +4,7 @@
   "description": "A 3D animated energy flow card for Home Assistant",
   "main": "dist/energy-3d-card.js",
   "scripts": {
+    "start": "rollup -c rollup.config.dev.js --watch",
     "build": "rollup -c",
     "watch": "rollup -c --watch",
     "lint": "eslint src/**/*.ts",
