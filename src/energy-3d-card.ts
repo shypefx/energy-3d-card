@@ -385,7 +385,7 @@ export class Energy3dCard extends LitElement {
       }
 
       .layer-img {
-        width: 100%;
+        width: 80%;
         height: auto;
         display: block;
       }

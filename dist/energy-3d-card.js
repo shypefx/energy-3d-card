@@ -99,7 +99,7 @@ const rt=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e
       }
 
       .layer-img {
-        width: 100%;
+        width: 80%;
         height: auto;
         display: block;
       }

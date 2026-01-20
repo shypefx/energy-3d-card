@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test 3D Energy Card</title>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "lit": "https://esm.sh/lit@3.1.0",
+        "lit/": "https://esm.sh/lit@3.1.0/",
+        "lit/decorators.js": "https://esm.sh/lit@3.1.0/decorators.js",
+        "@lit/reactive-element": "https://esm.sh/@lit/reactive-element@2",
+        "@lit/reactive-element/": "https://esm.sh/@lit/reactive-element@2/",
+        "lit-html": "https://esm.sh/lit-html@3",
+        "lit-html/": "https://esm.sh/lit-html@3/",
+        "lit-element": "https://esm.sh/lit-element@4",
+        "lit-element/": "https://esm.sh/lit-element@4/"
+      }
+    }
+  </script>
+
+  <style>
+    body { 
+      background: #1c1c1c; 
+      color: white; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      padding: 40px; 
+      font-family: sans-serif; 
+    }
+    .container { 
+      width: 500px; 
+      background: #2c2c2c; 
+      border-radius: 12px; 
+      padding: 20px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+      border: 1px solid #444; 
+    }
+    h1 { margin-bottom: 20px; color: #f1c40f; }
+    ha-card { display: block; }
+  </style>
+</head>
+<body>
+
+  <h1>Energy 3D Card - Dev Mode</h1>
+
+  <div class="container">
+    <energy-3d-card id="myCard"></energy-3d-card>
+  </div>
+
+  <script type="module">
+    // For import maps, load the source directly (or unbundled transpiled version)
+    import './energy-3d-card.js';
+
+    customElements.whenDefined('energy-3d-card').then(() => {
+      const card = document.getElementById('myCard');
+      
+      card.setConfig({
+        grid_entity: "sensor.grid_test"
+      });
+
+      card.hass = {
+        states: {
+          "sensor.grid_test": { state: "1200" }
+        }
+      };
+    });
+  </script>
+</body>
+</html>
