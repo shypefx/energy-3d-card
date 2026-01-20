@@ -1,39 +1,32 @@
-import resolve from 'rollup-plugin-node-resolve';
-import typescript from 'rollup-plugin-typescript2';
-import babel from 'rollup-plugin-babel';
+import resolve from '@rollup/plugin-node-resolve'; // Utilise la version @rollup
+import typescript from '@rollup/plugin-typescript';
 import serve from 'rollup-plugin-serve';
-import { terser } from 'rollup-plugin-terser';
 import json from '@rollup/plugin-json';
-import ignore from './rollup-plugins/ignore';
-import { ignoreTextfieldFiles } from './elements/ignore/textfield';
-import { ignoreSelectFiles } from './elements/ignore/select';
-import { ignoreSwitchFiles } from './elements/ignore/switch';
 
 export default {
-  input: ['src/boilerplate-card.ts'],
+  input: ['src/energy-3d-card.ts'],
   output: {
     dir: './dist',
     format: 'es',
+    sourcemap: true, // Très utile pour débugger sur ton Mac
   },
   plugins: [
     resolve(),
     typescript(),
     json(),
-    babel({
-      exclude: 'node_modules/**',
-    }),
-    terser(),
     serve({
-      contentBase: './dist',
-      host: '0.0.0.0',
-      port: 5000,
+      contentBase: ['./', './dist'],
+      host: '0.0.0.0', // Permet l'accès depuis ton IP locale et localhost
+      port: 5001,      // Port 5001 pour éviter le conflit AirPlay du Mac
       allowCrossOrigin: true,
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
     }),
-    ignore({
-      files: [...ignoreTextfieldFiles, ...ignoreSelectFiles, ...ignoreSwitchFiles].map((file) => require.resolve(file)),
-    }),
   ],
+  // On ignore les warnings de circulaire dépendance souvent présents dans Lit
+  onwarn: (warning, warn) => {
+    if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+    warn(warning);
+  },
 };
