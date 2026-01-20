@@ -23,13 +23,13 @@ A beautiful 3D animated energy flow visualization card for Home Assistant.
 1. Open HACS in Home Assistant
 2. Click on "Frontend"
 3. Click the three dots menu → "Custom repositories"
-4. Add `https://github.com/YOUR_USERNAME/energy-3d-card` with category "Lovelace"
+4. Add `https://github.com/shypefx/energy-3d-card` with category "Lovelace"
 5. Click "Install"
 6. Restart Home Assistant
 
 ### Manual
 
-1. Download `energy-3d-card.js` from the [latest release](https://github.com/YOUR_USERNAME/energy-3d-card/releases)
+1. Download `energy-3d-card.js` from the [latest release](https://github.com/shypefx/energy-3d-card/releases)
 2. Copy to `config/www/energy-3d-card/`
 3. Add to Lovelace resources:
    ```yaml
